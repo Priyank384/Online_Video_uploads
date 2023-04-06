@@ -1,0 +1,16 @@
+{
+  "name": "youtubeapi",
+  "version": "1.0.0",
+  "description": "upload,Streaming and download videos.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "author": "asv",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "nodemon": "^2.0.22"
+  }
+}

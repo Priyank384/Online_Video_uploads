@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <video id="my-video" controls width="1440" height="720"  autoplay></video>
+   
+    <form action="/upload" enctype="multipart/form-data" method="post">
+        <div class="form-group">
+            <input type="file" class="form-control-file" name="file">
+            <input type="submit" value="Upload File" class="btn btn-default">
+        </div>
+    </form>
+</body>
+<script>
+    const videoElement = document.getElementById('my-video');
+    const url = '/video';
+
+    fetch(url)
+        .then(response => {
+            if (response.status === 206) {
+                // Streaming response received
+                response.body.pipeTo(new WritableStream({
+                    write(chunk) {
+                        // Append received data to the media element buffer
+                        videoElement.buffered.end(0);
+                        videoElement.srcObject = new MediaStream([chunk]);
+                    }
+                }));
+            } else {
+                // Non-streaming response received
+                response.blob().then(blob => {
+                    videoElement.src = URL.createObjectURL(blob);
+                });
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+</script>
+
+</html>
